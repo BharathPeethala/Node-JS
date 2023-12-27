@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  node:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: be_server
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    networks:
+      - be_network
+  db:
+    restart: always
+    image: mysql:8.2
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: '2019'
+    volumes:
+      - db-data:/data/db
+    ports:
+      - 3306:3306
+    networks:
+      - be_network
+
+networks:
+  be_network:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local

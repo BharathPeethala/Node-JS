@@ -3,11 +3,14 @@ import express from "express";
 let app = new express();
 
 app.get("/", (req, res) => {
-	res.json({ status: 200, response_message: "hello world" });
+	res.json({
+		status: 200,
+		response_message: "Server is available",
+	});
 });
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-	console.log("Server is running on port 80");
+	console.log(`Server is running on port ${PORT}`);
 });
