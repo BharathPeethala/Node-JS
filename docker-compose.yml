@@ -17,12 +17,15 @@ services:
       - be_network
   db:
     restart: always
-    image: mysql:8.2
+    image: mysql:latest
     container_name: db
     environment:
-      MYSQL_ROOT_PASSWORD: '2019'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: APP
+      MYSQL_USER: bharath
+      MYSQL_PASSWORD: 2019
     volumes:
-      - db-data:/data/db
+      - db-data:/var/lib/mysql
     ports:
       - 3306:3306
     networks:
