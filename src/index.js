@@ -1,14 +1,35 @@
 import express from "express";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth.route.js";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+
+import userRoutes from "./routes/user.route.js";
+
 import { HttpStatus, logger } from "./utils/index.js";
+
 import mysqlConnection from "./db/mysql.config.js";
+
 import Response from "./domain/Response.js";
+
+// checking mysql connections
+mysqlConnection.getConnection((error, connection) => {
+	if (error) {
+		logger.error(`DB connection is unsuccessful Error:${error}`);
+	} else {
+		logger.info(`DB connection:${connection.threadId} is successful`);
+		connection.release();
+	}
+});
 
 dotenv.config();
 const app = new express();
 
-app.use("/auth", authRoutes);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
 	res.send(
@@ -24,14 +45,4 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
 	logger.info("Server is ready to handle the connections at port:3000");
-
-	// checking mysql connections
-	mysqlConnection.getConnection((error, connection) => {
-		if (error) {
-			logger.error(`DB connection is unsuccessful Error:${error}`);
-		} else {
-			logger.info(`DB connection:${connection.threadId} is successful`);
-			connection.release();
-		}
-	});
 });

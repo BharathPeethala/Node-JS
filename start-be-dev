@@ -1,0 +1,2 @@
+echo 'Start the node sever';
+docker-compose up;
