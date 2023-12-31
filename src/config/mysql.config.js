@@ -1,6 +1,6 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
-import { logger } from "../utils/index.js";
+import { logger } from "../../utils/index.js";
 
 dotenv.config();
 

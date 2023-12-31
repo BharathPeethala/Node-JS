@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { logger } from "../utils/index.js";
+import { logger } from "./index.js";
 
 const generateHash = async (password) => {
 	try {

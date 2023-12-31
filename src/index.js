@@ -6,11 +6,13 @@ import session from "express-session";
 
 import userRoutes from "./routes/user.route.js";
 
-import { HttpStatus, logger } from "./utils/index.js";
-
-import mysqlConnection from "./db/mysql.config.js";
+import { HttpStatus, logger } from "../utils/index.js";
 
 import Response from "./domain/Response.js";
+
+import mysqlConnection from "./config/mysql.config.js";
+import sessionConfig from "./config/session.config.js";
+import checkSession from "./middleware/checkSession.js";
 
 // checking mysql connections
 mysqlConnection.getConnection((error, connection) => {
@@ -28,10 +30,11 @@ const app = new express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session(sessionConfig));
 
 app.use("/user", userRoutes);
 
-app.get("/", (req, res) => {
+app.get("/", checkSession, (req, res) => {
 	res.send(
 		new Response(
 			HttpStatus.OK.code,

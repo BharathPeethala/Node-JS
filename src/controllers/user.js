@@ -1,6 +1,6 @@
 import Response from "../domain/Response.js";
 import UserModel from "../models/user.model.js";
-import { logger, HttpStatus } from "../utils/index.js";
+import { logger, HttpStatus } from "../../utils/index.js";
 
 // Creating the user in the DB
 const createUser = (req, res) => {
@@ -30,7 +30,8 @@ const loginUser = (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	UserModel.loginUser(email, password)
-		.then((message) => {
+		.then(({ message, userId }) => {
+			req.session.userInfo = { userId: userId, userName: email };
 			res.send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, message));
 		})
 		.catch((error) => {
