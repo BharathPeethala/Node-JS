@@ -12,7 +12,7 @@ import Response from "./domain/Response.js";
 
 import mysqlConnection from "./config/mysql.config.js";
 import sessionConfig from "./config/session.config.js";
-import checkSession from "./middleware/checkSession.js";
+import checkSession from "./middleware/authCheck.js";
 
 // checking mysql connections
 mysqlConnection.getConnection((error, connection) => {

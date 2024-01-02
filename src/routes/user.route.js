@@ -1,10 +1,15 @@
 import { Router } from "express";
-import { createUser, loginUser } from "../controllers/user.js";
+import {
+  createUser,
+  loginUserJWT,
+  loginUserSession,
+} from "../controllers/user.js";
 
 const userRoutes = Router();
 
 // user routes
 userRoutes.route("/create").post(createUser);
-userRoutes.route("/login").post(loginUser);
+userRoutes.route("/session/login").post(loginUserSession);
+userRoutes.route("/jwt/login").post(loginUserJWT);
 
 export default userRoutes;
