@@ -7,29 +7,29 @@ dotenv.config();
 
 const checkAuth = (req, res, next) => {
   let decodedData;
-  try {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-    decodedData = token && jwt.verify(token, process.env.ACCESS_TOKEN);
-  } catch (error) {
-    logger.error("Unauthourized request");
-    res.send(
-      new Response(
-        HttpStatus.BAD_REQUEST.code,
-        HttpStatus.BAD_REQUEST.status,
-        "Invalid Request"
-      )
-    );
-    return;
-  }
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
   logger.info("Checking request is authourized or not");
-  if (req.session.userInfo) {
+  if (req.session.userInfo || req.session.passport.user.email) {
     logger.info("Session is valid");
     next();
-  } else if (decodedData) {
-    logger.info("Token is valid");
-    next();
+  } else if (token) {
+    try {
+      decodedData = token && jwt.verify(token, process.env.ACCESS_TOKEN);
+      logger.info("Token is valid");
+      next();
+    } catch (error) {
+      logger.error("Unauthourized request");
+      res.send(
+        new Response(
+          HttpStatus.BAD_REQUEST.code,
+          HttpStatus.BAD_REQUEST.status,
+          "Invalid Request"
+        )
+      );
+      return;
+    }
   } else {
     logger.error("Unauthourized request");
     res.send(

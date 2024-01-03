@@ -73,4 +73,34 @@ const loginUserJWT = (req, res) => {
       );
     });
 };
-export { createUser, loginUserSession, loginUserJWT };
+
+const googleCallbackSuccess = (req, res) => {
+  const googleData = req.user["_json"]
+  res.send(
+    new Response(
+      HttpStatus.OK.code,
+      HttpStatus.OK.status,
+      "Google Signin successful",
+      googleData
+    )
+  );
+};
+
+const googleCallbackFailure = (req, res) => {
+  logger.info(req);
+  res.send(
+    new Response(
+      HttpStatus.NOT_FOUND.code,
+      HttpStatus.NOT_FOUND.status,
+      "Google Signin unsuccessful"
+    )
+  );
+};
+
+export {
+  createUser,
+  loginUserSession,
+  loginUserJWT,
+  googleCallbackSuccess,
+  googleCallbackFailure,
+};
